@@ -1,0 +1,7 @@
+# Deploys a mano con la CLI (desde la raíz, Root Directory = landing): subir
+# solo el código de la landing, no la app de Expo ni ningún node_modules.
+/*
+!/landing
+/landing/node_modules
+/landing/.next
+/landing/.env*

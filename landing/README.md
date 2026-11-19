@@ -58,6 +58,25 @@ falla hasta que corre un `next dev` o `next build` por primera vez.
   `marquee`, `notif-hop`, `bell-ring`…). Todas mueven solo `transform`/`opacity`
   y se apagan con "reducir movimiento".
 
+## Despliegue
+
+Proyecto **`mensualy`** en Vercel (cuenta `jonathanblandon1017-5123`, la misma de
+meld, mywallet y joblan), con `Root Directory` = `landing` y framework Next.js
+(puestos por la API el 2026-11-19). Público en **https://usemensualy.vercel.app**
+(también responde `mensualy.vercel.app`). `NEXT_PUBLIC_SITE_URL` ya está en las 3
+environments; si cambia el dominio, actualizarla y buscar la URL vieja en el repo.
+
+- **Deploy a mano**: `vercel deploy --prod` desde la **raíz del repo**, no desde
+  `landing/` (Vercel le agrega `landing/` encima). El `.vercelignore` de la raíz
+  deja subir solo el código de la landing: sin él la CLI intenta subir 1,2 GB
+  (la app de Expo, `android/`, los `node_modules`) y falla por el límite de 100 MB.
+- **Deploy automático**: falta conectar el repo. La app de Vercel en GitHub no
+  tiene acceso a `JhonnyXT/mensualy-app` (está limitada a repos seleccionados):
+  agregarlo en GitHub → Settings → Applications → Vercel → Configure, y después
+  correr `vercel git connect` en la raíz. Desde ahí cada push a `master` publica.
+- Ojo: la CLI de esta máquina también se usa con otra cuenta (matri-click).
+  Antes de publicar, `vercel whoami` tiene que decir `jonathanblandon1017-5123`.
+
 ## Gotcha: animaciones con `@keyframes`
 
 Tailwind v4 elimina del CSS final los `@keyframes` declarados dentro de
@@ -69,5 +88,5 @@ estilos en línea van FUERA de `@theme`, en `globals.css` normal.
 - Fase 1 (hecha): diseño completo en español e inglés, política de privacidad.
 - Fase 2 (hecha): demo interactiva (agregar, servicio local, detalle, marcar
   usada, cancelar, aviso de cobro, descartar sugerencias), narrador y resumen en vivo.
-- Fase 3: capturas reales, imagen Open Graph y deploy en Vercel (repo de GitHub
-  pendiente de crear).
+- Fase 3 (en curso): publicada en Vercel (ver arriba). Falta: conectar el repo
+  para deploy automático, imagen Open Graph propia y capturas reales.
