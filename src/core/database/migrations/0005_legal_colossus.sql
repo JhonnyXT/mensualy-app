@@ -1,0 +1,1 @@
+ALTER TABLE `app_settings` ADD `biometric_lock_enabled` integer DEFAULT false NOT NULL;
