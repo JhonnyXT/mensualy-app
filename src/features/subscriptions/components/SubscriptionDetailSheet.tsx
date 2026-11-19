@@ -560,7 +560,9 @@ function DetailContent({
             </Text>
           </View>
           <Text className="text-[13px]" style={{ color: DASH.textSecondary, fontFamily: FONT.regular }}>
-            {reminderDays != null ? `${reminderDays} días antes` : "Sin aviso"}
+            {/* Sin recordatorio propio ni global, `rescheduleAllReminders` avisa el
+                mismo día del cobro: nunca hay "sin aviso". */}
+            {!reminderDays ? "El mismo día" : `${reminderDays} ${reminderDays === 1 ? "día" : "días"} antes`}
           </Text>
         </View>
 

@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
+import { File, Paths } from "expo-file-system";
 import type { Subscription } from "../../core/database/schema";
 import * as subscriptionRepository from "../subscriptions/repository/subscriptionRepository";
 import { formatCurrency } from "../../core/currency/exchangeRate";
@@ -7,6 +8,19 @@ import { formatCurrency } from "../../core/currency/exchangeRate";
 const CHANNEL_ID = "subscription-reminders";
 const REMINDER_PREFIX = "subscription-reminder-";
 const NOTIFICATION_HOUR = 9;
+
+// `rescheduleAllReminders` corre en cada refresh de la lista: sin este registro,
+// el aviso de "rescate" (hora de hoy ya pasada) se volvía a disparar cada vez
+// que se abría el dashboard. Guarda, por suscripción, el día en que ya salió.
+const CATCH_UP_LOG = new File(Paths.document, "reminders-catch-up.json");
+
+function readCatchUpLog(): Record<string, string> {
+  try {
+    return CATCH_UP_LOG.exists ? JSON.parse(CATCH_UP_LOG.textSync()) : {};
+  } catch {
+    return {};
+  }
+}
 
 // Sin esto, una notificación programada que llega con la app en primer
 // plano no se muestra (comportamiento por defecto de expo-notifications) —
@@ -58,21 +72,23 @@ function buildTriggerDate(billingDate: Date, daysBefore: number): Date {
  * día) en vez de no avisar nada — pedido explícito: toda suscripción activa
  * con fecha de cobro debe generar al menos el aviso del día del cobro.
  */
-export async function rescheduleAllReminders(subscriptions: Subscription[]) {
+async function doReschedule(subscriptions: Subscription[]) {
   const { status } = await Notifications.getPermissionsAsync();
   if (status !== "granted") return;
 
   await ensureChannelAsync();
 
-  const scheduled = await Notifications.getAllScheduledNotificationsAsync();
-  await Promise.all(
-    scheduled
-      .filter((n) => n.identifier.startsWith(REMINDER_PREFIX))
-      .map((n) => Notifications.cancelScheduledNotificationAsync(n.identifier))
+  const scheduled = (await Notifications.getAllScheduledNotificationsAsync()).filter((n) =>
+    n.identifier.startsWith(REMINDER_PREFIX)
   );
+  const pending = new Set(scheduled.map((n) => n.identifier));
+  await Promise.all(scheduled.map((n) => Notifications.cancelScheduledNotificationAsync(n.identifier)));
 
   const now = new Date();
+  const today = now.toDateString();
   const active = subscriptions.filter((s) => s.status === "active");
+  const catchUpLog = readCatchUpLog();
+  let catchUpLogChanged = false;
 
   await Promise.all(
     active.map(async (sub) => {
@@ -87,8 +103,13 @@ export async function rescheduleAllReminders(subscriptions: Subscription[]) {
         // más tarde en el día — igual debe avisar HOY, no saltearse el
         // aviso hasta el ciclo siguiente. Se dispara casi de inmediato en
         // vez de a las 9am.
-        const esMismoDia = triggerDate.toDateString() === now.toDateString();
+        const esMismoDia = triggerDate.toDateString() === today;
         if (!esMismoDia) return; // el día del aviso ya quedó completamente atrás
+        // Ya avisó hoy — salvo que ese aviso siguiera pendiente (lo acabamos de
+        // cancelar arriba): entonces se vuelve a programar para no perderlo.
+        if (catchUpLog[sub.id] === today && !pending.has(reminderIdentifier(sub.id))) return;
+        catchUpLog[sub.id] = today;
+        catchUpLogChanged = true;
         effectiveTrigger = new Date(now.getTime() + 10_000);
       }
 
@@ -110,4 +131,16 @@ export async function rescheduleAllReminders(subscriptions: Subscription[]) {
       });
     })
   );
+
+  if (catchUpLogChanged) CATCH_UP_LOG.write(JSON.stringify(catchUpLog));
+}
+
+// Las pasadas corren en fila: dos refresh() seguidos no deben pisarse (una
+// cancelando lo que la otra acaba de programar).
+let queue: Promise<void> = Promise.resolve();
+
+export function rescheduleAllReminders(subscriptions: Subscription[]): Promise<void> {
+  const run = queue.then(() => doReschedule(subscriptions));
+  queue = run.catch(() => {});
+  return run;
 }
