@@ -70,12 +70,10 @@ environments; si cambia el dominio, actualizarla y buscar la URL vieja en el rep
   `landing/` (Vercel le agrega `landing/` encima). El `.vercelignore` de la raíz
   deja subir solo el código de la landing: sin él la CLI intenta subir 1,2 GB
   (la app de Expo, `android/`, los `node_modules`) y falla por el límite de 100 MB.
-- **Deploy automático**: falta conectar el repo. La app de Vercel en GitHub no
-  tiene acceso a `JhonnyXT/mensualy-app` (está limitada a repos seleccionados):
-  agregarlo en GitHub → Settings → Applications → Vercel → Configure, y después
-  correr `vercel git connect` en la raíz. Desde ahí cada push a `master` publica.
-- Ojo: la CLI de esta máquina también se usa con otra cuenta (matri-click).
-  Antes de publicar, `vercel whoami` tiene que decir `jonathanblandon1017-5123`.
+- **Deploy automático**: el repo `JhonnyXT/mensualy-app` está conectado (2026-11-19):
+  cada push a `master` publica solo. No hace falta deployar a mano.
+- La CLI de esta máquina queda logueada en `jonathanblandon1017-5123`; si
+  `vercel whoami` dice otra cuenta, volver a esta con `vercel login`.
 
 ## Gotcha: animaciones con `@keyframes`
 
@@ -88,5 +86,5 @@ estilos en línea van FUERA de `@theme`, en `globals.css` normal.
 - Fase 1 (hecha): diseño completo en español e inglés, política de privacidad.
 - Fase 2 (hecha): demo interactiva (agregar, servicio local, detalle, marcar
   usada, cancelar, aviso de cobro, descartar sugerencias), narrador y resumen en vivo.
-- Fase 3 (en curso): publicada en Vercel (ver arriba). Falta: conectar el repo
-  para deploy automático, imagen Open Graph propia y capturas reales.
+- Fase 3 (en curso): publicada en Vercel con deploy automático (ver arriba).
+  Falta: imagen Open Graph propia y capturas reales.
