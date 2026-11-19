@@ -1,0 +1,255 @@
+@import "tailwindcss";
+
+/* Paleta de Mensualy: la del tema oscuro de la app (`DASH` en
+ * `src/features/dashboard/dashboardTheme.ts`). El violeta de los botones es un
+ * tono más oscuro que el de marca para que el texto blanco cumpla AA; el
+ * violeta claro es el acento de texto sobre fondo oscuro. Verde, rojo y ámbar
+ * quedan reservados para estados (activa, cancelada/aumento, recordatorio).
+ * `--color-brand-deep` es el fondo del ícono. */
+@theme {
+  --color-bg: #0d0d12;
+  --color-sunken: #09090d;
+  --color-card: #15151c;
+  --color-surface: #1b1b22;
+  --color-surface-2: #252530;
+  --color-line: #2a2a35;
+  --color-ink: #f5f5f7;
+  --color-dim: #a1a1aa;
+  --color-faint: #8a8a94;
+  --color-mute: #6b6b76;
+  --color-accent: #9d90ff;
+  --color-violet: #7c6bff;
+  --color-btn: #6b5ae8;
+  --color-btn-hover: #5b4ad6;
+  --color-brand-deep: #160b2d;
+  --color-cream: #f5f2eb;
+
+  --color-ok: #34c77a;
+  --color-bad: #ff6259;
+  --color-warn: #f59e0b;
+
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-hand: var(--font-caveat), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-btn);
+  color: #fff;
+}
+
+/* Aparición al entrar en pantalla (`Reveal.tsx` pone `data-shown`). Sin JS
+ * (o con reducir movimiento) el contenido se ve igual, solo sin la entrada. */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal[data-shown='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Animaciones usadas desde clases propias o estilos en línea. Van FUERA de
+ * @theme a propósito: Tailwind v4 elimina del CSS final los @keyframes de
+ * @theme que ninguna clase suya usa. Todas mueven solo transform/opacity. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes notif-hop {
+  0%,
+  72%,
+  100% {
+    transform: translateY(0);
+  }
+  78% {
+    transform: translateY(-12px);
+  }
+  86% {
+    transform: translateY(0);
+  }
+  92% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes bell-ring {
+  0%,
+  72%,
+  100% {
+    transform: rotate(0);
+  }
+  76% {
+    transform: rotate(-16deg);
+  }
+  80% {
+    transform: rotate(14deg);
+  }
+  84% {
+    transform: rotate(-10deg);
+  }
+  88% {
+    transform: rotate(6deg);
+  }
+  92% {
+    transform: rotate(0);
+  }
+}
+@keyframes ping-soft {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.float-card {
+  animation: float 5.5s ease-in-out infinite both;
+}
+.marquee {
+  animation: marquee 48s linear infinite;
+}
+.marquee-reverse {
+  animation: marquee 56s linear infinite reverse;
+}
+.marquee-pause:hover .marquee,
+.marquee-pause:hover .marquee-reverse {
+  animation-play-state: paused;
+}
+.notif-hop {
+  animation: notif-hop 4.5s ease-in-out infinite;
+}
+.bell-ring {
+  animation: bell-ring 4.5s ease-in-out infinite;
+  transform-origin: 50% 20%;
+}
+.ping-soft {
+  animation: ping-soft 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+.glow-breathe {
+  animation: glow-breathe 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  /* Los loops infinitos se detienen (no la duración mínima, que en un loop
+   * parpadearía). */
+  .float-card,
+  .marquee,
+  .marquee-reverse,
+  .notif-hop,
+  .bell-ring,
+  .ping-soft,
+  .glow-breathe {
+    animation: none;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Demo interactiva (réplicas de la app en `src/demo/phone/`). */
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes notif-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.96);
+  }
+}
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes banner-timer {
+  to {
+    transform: scaleX(0);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(124, 107, 255, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(124, 107, 255, 0);
+  }
+}
+.pulse-ring {
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-ring {
+    animation: none;
+  }
+}
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}

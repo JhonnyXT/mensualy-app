@@ -1,0 +1,187 @@
+import type { Dictionary } from './es';
+
+// What's shown "inside the app" (phone, notifications) stays in Spanish/COP on
+// purpose: the app currently exists only in Spanish. `hero.finePrint` says so.
+
+export const en: Dictionary = {
+  meta: {
+    title: 'Mensualy — your subscriptions, every month with no surprises',
+    description:
+      'See what you pay per month and per year in subscriptions, get a heads-up before every charge and spot the ones you no longer use. No accounts, no cloud, never touches your payments.',
+  },
+  nav: {
+    language: 'Language',
+    label: 'Sections',
+    demo: 'Try it',
+    features: 'Features',
+    privacy: 'Privacy',
+    notify: 'Notify me',
+  },
+  legal: {
+    back: 'Back',
+  },
+  waitlist: {
+    label: 'Let me know when Mensualy lands on Google Play',
+    submit: 'Notify me',
+  },
+  hero: {
+    iconAlt: 'Mensualy icon',
+    eyebrow: 'Subscription tracker',
+    title1: 'Every month,',
+    title2: 'no surprises.',
+    subtitle:
+      'All your subscriptions in one place: what you pay per month and per year, a heads-up before every charge and clear signals about the ones you no longer use.',
+    finePrint: 'Coming soon to Android · iOS on the way · Free · App in Spanish',
+    privacyLink: 'Your data never leaves your phone',
+  },
+  demo: {
+    narratorNote: 'what’s happening',
+    liveNote: 'updates live',
+    tryTitle: 'Try this',
+    actions: { add: 'Add a subscription', banner: 'Simulate a charge reminder', zombie: 'Check the zombie subscription', reset: 'Reset demo' },
+    live: {
+      title: 'Your summary',
+      month: 'Per month',
+      year: 'Per year',
+      active: 'Active',
+      next: 'Next charge',
+      nextIn: 'in {days} days',
+      nextToday: 'today',
+      possible: 'If you cancel what you barely use',
+      possibleNote: 'Zombie and low-use subscriptions, per year.',
+      none: 'Nothing for now',
+    },
+    ev: {
+      intro: {
+        eyebrow: 'Try it here',
+        title: 'It’s the real app, with sample data.',
+        body: 'Tap a renewal or a tip to see its details, use + to add a subscription or simulate the charge reminder. Nothing is saved: reload and it starts over. (The app itself is in Spanish.)',
+      },
+      addOpen: {
+        eyebrow: 'Add',
+        title: 'New subscription',
+        body: 'Search the catalog, or type something that isn’t there (like “Gimnasio del barrio”) to add it with its initials. Enter the amount, billing date and when you want the reminder.',
+      },
+      added: { eyebrow: 'Done', title: '{name} added', body: 'Watch the monthly and yearly totals change. If the charge is soon, it already shows under “Próxima renovación”.' },
+      addedLocal: { eyebrow: 'Local service', title: '{name} added', body: 'It wasn’t in the catalog, so it got its initials. It still counts toward your spend and reminds you before the charge.' },
+      detail: { eyebrow: 'Details', title: '{name}', body: 'What you pay per month and per year, when the next charge is, how long until then and how far ahead it reminds you.' },
+      used: { eyebrow: 'Activity', title: 'Marked as used', body: 'Now Mensualy knows you still use it and stops flagging it as a zombie.' },
+      cancelAsk: { eyebrow: 'Cancel', title: 'Cancel it?', body: 'Mensualy doesn’t log into Netflix or Spotify for you: it stops counting it in your spend and you cancel it on the service whenever you want.' },
+      cancelled: { eyebrow: 'Cancelled', title: '{name} cancelled', body: 'Your spend dropped instantly. In the app it stays in history and comes back with one tap.' },
+      banner: { eyebrow: 'Reminder', title: 'This is how it reminds you', body: 'This is the notification you get before {name} charges you. Tap it on the phone: it opens straight to its details.' },
+      bannerTap: { eyebrow: 'From the notification', title: 'Straight to the details', body: 'One tap and you’re on the subscription, in time to review or cancel it before you’re charged.' },
+      dismissed: { eyebrow: 'Tips', title: 'Tip dismissed', body: 'It won’t show it again for now. Tips let you know, they never decide for you.' },
+    },
+  },
+  catalog: {
+    eyebrow: 'Add',
+    titleA: 'Over',
+    chip: '50',
+    titleB: 'services, or your own.',
+    subtitle:
+      'Search Netflix, Spotify or ChatGPT and Mensualy fills in the name, logo and category. Paying for something that isn’t listed, like your local gym? Add it anyway: it gets its initials.',
+    localTitle: 'Not in the catalog?',
+    localBody: 'Type the name and keep going. Nothing stops you.',
+    localExample: 'Gimnasio',
+    localAdded: 'Added',
+    steps: [
+      { t: 'Find the service', d: 'Logo, name and category, done.' },
+      { t: 'Enter the amount', d: 'In COP, USD or EUR, with live thousands separators.' },
+      { t: 'Pick the billing date', d: 'Once: Mensualy rolls it forward every cycle.' },
+    ],
+  },
+  reminders: {
+    eyebrow: 'Reminders',
+    title: 'A heads-up before you’re charged.',
+    subtitle:
+      'Choose how many days ahead you want to know, per subscription or for all of them. Choose nothing and you still get a reminder on billing day.',
+    optionsTitle: 'Remind me',
+    options: ['Same day', '1 day before', '2 days before', '3 days before'],
+    tapTitle: 'One tap and you’re there',
+    tapBody: 'Tapping the notification opens that subscription’s details, ready to cancel or edit.',
+    localNote: 'Local notifications: scheduled on your phone, no servers.',
+  },
+  calendar: {
+    eyebrow: 'Calendar',
+    title: 'Your month, charge by charge.',
+    subtitle: 'Each dot is a charge. Tap a day to see what renews and for how much.',
+    month: 'November 2026',
+    weekdays: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+    monthShort: 'November',
+    monthTotal: 'Month total',
+    charges: 'charges',
+    selectedLabel: 'Charges on',
+    hint: 'Tap a day with a dot',
+    empty: 'No charges that day.',
+  },
+  savings: {
+    eyebrow: 'Saving tips',
+    title: 'It tells you what’s extra.',
+    subtitle: 'Mensualy reviews your subscriptions and shows you, no judgment, where your money is slipping away.',
+    cards: [
+      { t: 'Zombie subscription', d: '90+ days without marking it as used.', example: 'Disney+ · 97 days unused' },
+      { t: 'Price went up', d: 'Keeps every amount’s history and spots increases over the last year.', example: 'Spotify · 12% more' },
+      { t: 'Low use', d: 'An early warning before it turns zombie.', example: 'HBO Max · 52 days unused' },
+      { t: 'Overlapping services', d: 'Two or more in the same category: do you need them all?', example: 'Streaming · 3 services' },
+      { t: 'Outsized spend', d: 'When a single one takes a quarter or more of your monthly spend.', example: 'ChatGPT Plus · 34% of total' },
+    ],
+  },
+  sharing: {
+    eyebrow: 'Shared costs',
+    title: 'Split it and pay only your part.',
+    subtitle:
+      'Sharing Spotify with your partner or Netflix with family? Mark who and what share you pay. Mensualy works out how much you save per month, down to the cent.',
+    you: 'You pay',
+    them: 'Laura pays',
+    saved: 'You cut your spend by',
+    perMonth: '/mo',
+    portion: 'Your share',
+  },
+  details: {
+    title: 'And the details that matter',
+    items: {
+      offline: { t: 'Works offline', d: 'Everything lives on your phone. Open, add, done.' },
+      currency: { t: 'COP, USD and EUR', d: 'Mix currencies and see it all in yours.' },
+      auto: { t: 'Dates that roll forward', d: 'Pick the day once; every cycle advances on its own.' },
+      cycles: { t: 'Weekly, monthly or yearly', d: 'With the monthly and yearly equivalent to compare.' },
+      biometric: { t: 'Fingerprint or Face ID lock', d: 'Nobody else sees what you spend on.' },
+      theme: { t: 'Light and dark mode', d: 'Pick your favorite in Settings.' },
+      export: { t: 'Export your data', d: 'One file with everything, whenever you want.' },
+      cancel: { t: 'Cancel without losing anything', d: 'Cancelled ones stay in history and come back with one tap.' },
+      noAccount: { t: 'No accounts', d: 'No sign-up, no password. Install it and start.' },
+    },
+  },
+  privacy: {
+    title: 'Your subscriptions',
+    titleB: 'are yours alone.',
+    subtitle: 'Mensualy has no servers holding your data. What you add stays on your phone.',
+    free: {
+      name: 'Free',
+      price: '$0',
+      per: 'No ads, no tricks',
+      items: ['Unlimited subscriptions', 'Reminders before every charge', 'Saving tips', 'Calendar and spend analysis', 'Shared costs'],
+    },
+    data: {
+      name: 'Your data',
+      tag: 'local-first',
+      items: {
+        local: { t: 'On your phone', d: 'A local database (SQLite), not a cloud.' },
+        noAccount: { t: 'No account', d: 'We don’t ask for an email, real name or password.' },
+        noPayments: { t: 'Never touches your payments', d: 'It doesn’t connect to your bank or cards: you decide what to add.' },
+        notifications: { t: 'Local reminders', d: 'Your own phone schedules them.' },
+        export: { t: 'You hold the key', d: 'Export everything to a file anytime.' },
+      },
+    },
+  },
+  cta: {
+    titleA: 'Your next charge',
+    titleB: 'won’t catch you off guard.',
+    note: 'We’ll email you once, when it’s on Google Play.',
+  },
+  footer: {
+    privacy: 'Privacy policy',
+    support: 'Support',
+    rights: '© 2026 Mensualy',
+    madeBy: 'Made by',
+  },
+};
