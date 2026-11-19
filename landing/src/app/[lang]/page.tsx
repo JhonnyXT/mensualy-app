@@ -9,6 +9,7 @@ import { Hero } from '@/components/sections/Hero';
 import { Privacy } from '@/components/sections/Privacy';
 import { Reminders } from '@/components/sections/Reminders';
 import { Savings } from '@/components/sections/Savings';
+import { Screens } from '@/components/sections/Screens';
 import { Sharing } from '@/components/sections/Sharing';
 import { DemoSection } from '@/demo/DemoSection';
 import { Divider } from '@/components/sections/shared';
@@ -37,6 +38,7 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
         <Sharing t={t.sharing} />
         <Divider />
         <Details t={t.details} />
+        <Screens t={t.screens} />
         <Privacy t={t.privacy} policyLabel={t.footer.privacy} locale={lang} />
         <FinalCta t={t} locale={lang} />
         <Footer t={t.footer} locale={lang} />

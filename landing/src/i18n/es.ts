@@ -152,6 +152,22 @@ export const es = {
       noAccount: { t: 'Sin cuentas', d: 'Ni registro ni contraseña. La instalas y empiezas.' },
     },
   },
+  screens: {
+    eyebrow: 'Pantallas',
+    title: 'Así se ve en tu teléfono',
+    subtitle: 'Capturas reales de la app, con datos de ejemplo.',
+    prev: 'Pantalla anterior',
+    next: 'Pantalla siguiente',
+    goTo: 'Ir a la pantalla',
+    items: [
+      { a: 'Tu mes y tu año,', b: 'de un vistazo.', alt: 'Inicio de Mensualy con el gasto mensual y anual' },
+      { a: 'Te dice', b: 'qué sobra.', alt: 'Sugerencias de ahorro de Mensualy' },
+      { a: 'Cada detalle,', b: 'en un toque.', alt: 'Detalle de una suscripción en Mensualy' },
+      { a: 'Agregar toma', b: 'segundos.', alt: 'Formulario de nueva suscripción de Mensualy' },
+      { a: 'Cobro', b: 'por cobro.', alt: 'Calendario de cobros de Mensualy' },
+      { a: 'Todas,', b: 'en orden.', alt: 'Lista de suscripciones de Mensualy' },
+    ],
+  },
   privacy: {
     title: 'Tus suscripciones',
     titleB: 'son solo tuyas.',

@@ -151,6 +151,22 @@ export const en: Dictionary = {
       noAccount: { t: 'No accounts', d: 'No sign-up, no password. Install it and start.' },
     },
   },
+  screens: {
+    eyebrow: 'Screens',
+    title: 'This is how it looks on your phone',
+    subtitle: 'Real screenshots of the app (in Spanish), with sample data.',
+    prev: 'Previous screen',
+    next: 'Next screen',
+    goTo: 'Go to screen',
+    items: [
+      { a: 'Your month and year,', b: 'at a glance.', alt: 'Mensualy home with monthly and yearly spend' },
+      { a: 'It tells you', b: 'what’s extra.', alt: 'Mensualy saving tips' },
+      { a: 'Every detail,', b: 'one tap away.', alt: 'Subscription details in Mensualy' },
+      { a: 'Adding one takes', b: 'seconds.', alt: 'Mensualy new subscription form' },
+      { a: 'Charge', b: 'by charge.', alt: 'Mensualy billing calendar' },
+      { a: 'All of them,', b: 'in order.', alt: 'Mensualy subscription list' },
+    ],
+  },
   privacy: {
     title: 'Your subscriptions',
     titleB: 'are yours alone.',

@@ -46,6 +46,13 @@ falla hasta que corre un `next dev` o `next build` por primera vez.
   cambia el diseño o las reglas en la app, actualizar la réplica. "Editar
   suscripción" se muestra pero no responde. En pantallas chicas el narrador
   queda debajo del teléfono, así que sus acciones suben la vista al teléfono.
+- **Pantallas** (`sections/Screens.tsx`, carrusel copiado de Meld): capturas
+  reales en `public/img/screens/`. Se sacaron del variant `dev` con una base
+  SQLite de ejemplo (mismos datos que la demo: Ana, Netflix, Spotify compartida
+  con Laura y con aumento de precio, Disney+ zombie...), respaldando antes la base
+  del teléfono y restaurándola al terminar. La barra de estado se tapa columna por
+  columna con el color de abajo y se dibuja una limpia (9:41). Al reemplazar una,
+  usar un nombre de archivo nuevo (`next/image` cachea por URL).
 - **Lista de espera**: vive en **joblan** (`joblanstudio.com/<idioma>?app=mensualy#avisame`,
   `src/components/WaitlistCta.tsx`), el estudio donde están todas las apps.
   Mensualy comparte el segmento "General" de Resend y se distingue por su topic
@@ -87,4 +94,4 @@ estilos en línea van FUERA de `@theme`, en `globals.css` normal.
 - Fase 2 (hecha): demo interactiva (agregar, servicio local, detalle, marcar
   usada, cancelar, aviso de cobro, descartar sugerencias), narrador y resumen en vivo.
 - Fase 3 (en curso): publicada en Vercel con deploy automático (ver arriba).
-  Falta: imagen Open Graph propia y capturas reales.
+  Capturas reales hechas (2026-11-19). Falta: imagen Open Graph propia.

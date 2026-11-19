@@ -11,9 +11,11 @@ import { SectionHead } from './shared';
 const OFFSET = 6;
 const DAYS = 30;
 
-// Todas las de la demo son mensuales: cada una cobra en noviembre el mismo día del mes.
+// Como `CalendarSheet` de la app: cada suscripción aparece en el día de su
+// PRÓXIMO cobro, así que en noviembre solo están las que se cobran este mes.
+const NOV = DEMO_SUBS.filter((s) => s.billing.month === 'nov');
 const byDay = new Map<number, typeof DEMO_SUBS>();
-for (const s of DEMO_SUBS) byDay.set(s.billing.day, [...(byDay.get(s.billing.day) ?? []), s]);
+for (const s of NOV) byDay.set(s.billing.day, [...(byDay.get(s.billing.day) ?? []), s]);
 
 export function CalendarSection({ t }: { t: Dictionary['calendar'] }) {
   const [selected, setSelected] = useState(20);
@@ -92,9 +94,9 @@ export function CalendarSection({ t }: { t: Dictionary['calendar'] }) {
           )}
           <div className="mt-auto flex items-center justify-between border-t border-line pt-4 text-sm">
             <span className="text-dim">
-              {t.monthTotal} · {DEMO_SUBS.length} {t.charges}
+              {t.monthTotal} · {NOV.length} {t.charges}
             </span>
-            <b className="tabular-nums">{cop(monthlyTotal(DEMO_SUBS))}</b>
+            <b className="tabular-nums">{cop(monthlyTotal(NOV))}</b>
           </div>
         </div>
       </Reveal>
