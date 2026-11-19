@@ -8,6 +8,7 @@ import { useTheme } from "../../../core/design-system/hooks/useTheme";
 import { useSubscriptionSheets } from "../hooks/useSubscriptionSheets";
 import * as subscriptionRepository from "../repository/subscriptionRepository";
 import { calcularDivisionCosto } from "../../sharing/domain/calcularDivisionCosto";
+import { montoMensualYAnual } from "../domain/montoMensualYAnual";
 import { formatCurrency } from "../../../core/currency/exchangeRate";
 import { ServiceBadge } from "../../../core/design-system/components/ServiceBadge";
 import { FONT } from "../../dashboard/dashboardTheme";
@@ -90,8 +91,11 @@ function SavingsContent({
   onActivate: () => void;
 }) {
   const DASH = useTheme();
-  const division = calcularDivisionCosto(subscription.amount, 50);
-  const ahorroMensual = subscription.amount - division.montoUsuario;
+  // Equivalente mensual, no `amount` directo — una suscripción anual o
+  // semanal no vale lo mismo que su monto nominal por mes.
+  const { mensual: montoMensual } = montoMensualYAnual(subscription);
+  const division = calcularDivisionCosto(montoMensual, 50);
+  const ahorroMensual = montoMensual - division.montoUsuario;
   const ahorroAnual = ahorroMensual * 12;
 
   return (
@@ -146,7 +150,7 @@ function SavingsContent({
             Plan individual
           </Text>
           <Text className="text-sm" style={{ color: DASH.textPrimary, fontFamily: FONT.medium }}>
-            {formatCurrency(subscription.amount, subscription.currency)}/mes
+            {formatCurrency(montoMensual, subscription.currency)}/mes
           </Text>
         </View>
         <View

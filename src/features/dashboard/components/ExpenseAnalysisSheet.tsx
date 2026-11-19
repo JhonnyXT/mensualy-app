@@ -5,6 +5,7 @@ import { GestureDetector, GestureHandlerRootView } from "react-native-gesture-ha
 import Animated from "react-native-reanimated";
 import { useDragToDismiss } from "../../../core/design-system/hooks/useDragToDismiss";
 import { formatCurrency, convertCurrency } from "../../../core/currency/exchangeRate";
+import { montoMensualYAnual } from "../../subscriptions/domain/montoMensualYAnual";
 import { useAppSettings } from "../../settings/hooks/useAppSettings";
 import { useTheme } from "../../../core/design-system/hooks/useTheme";
 import { FONT } from "../dashboardTheme";
@@ -37,7 +38,10 @@ function useChartData(activas: Subscription[], frecuencia: Frecuencia, mainCurre
     const totals = years.map((year) => {
       const mensual = activas
         .filter((s) => s.createdAt.getFullYear() <= year)
-        .reduce((sum, s) => sum + convertCurrency(s.amount, s.currency, mainCurrency), 0);
+        .reduce(
+          (sum, s) => sum + convertCurrency(montoMensualYAnual(s).mensual, s.currency, mainCurrency),
+          0
+        );
       return frecuencia === "anual" ? mensual * 12 : mensual;
     });
 

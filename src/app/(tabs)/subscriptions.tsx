@@ -11,6 +11,7 @@ import { useAppSettings } from "../../features/settings/hooks/useAppSettings";
 import { useSubscriptionSheets } from "../../features/subscriptions/hooks/useSubscriptionSheets";
 import { FONT } from "../../features/dashboard/dashboardTheme";
 import { useTheme } from "../../core/design-system/hooks/useTheme";
+import { montoMensualYAnual } from "../../features/subscriptions/domain/montoMensualYAnual";
 import type { Subscription } from "../../core/database/schema";
 
 type StatusFilter = "all" | "active" | "cancelled";
@@ -115,8 +116,10 @@ export default function SubscriptionsScreen() {
   }, []);
 
   const activas = useMemo(() => subscriptions.filter((s) => s.status === "active"), [subscriptions]);
+  // Equivalente mensual de cada una, no `amount` directo — ver dashboard.tsx.
   const gastoMensualCOP = useMemo(
-    () => activas.reduce((total, s) => total + convertToCOP(s.amount, s.currency), 0),
+    () =>
+      activas.reduce((total, s) => total + convertToCOP(montoMensualYAnual(s).mensual, s.currency), 0),
     [activas]
   );
 

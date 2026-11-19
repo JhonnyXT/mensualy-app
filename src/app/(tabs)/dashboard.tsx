@@ -12,6 +12,7 @@ import { esSuscripcionZombie, diasSinUsar, esUsoBajoTemprano } from "../../featu
 import { detectarCategoriasDuplicadas } from "../../features/savings/domain/detectarCategoriaDuplicada";
 import { detectarGastoDesproporcionado } from "../../features/savings/domain/detectarGastoDesproporcionado";
 import { detectarAumentoPrecio } from "../../features/subscriptions/domain/detectarAumentoPrecio";
+import { montoMensualYAnual } from "../../features/subscriptions/domain/montoMensualYAnual";
 import * as subscriptionRepository from "../../features/subscriptions/repository/subscriptionRepository";
 import { formatCurrency, convertToCOP, convertCurrency } from "../../core/currency/exchangeRate";
 import { FONT } from "../../features/dashboard/dashboardTheme";
@@ -160,8 +161,12 @@ export default function DashboardScreen() {
 
   const activas = useMemo(() => subscriptions.filter((s) => s.status === "active"), [subscriptions]);
 
+  // Suma el EQUIVALENTE MENSUAL de cada suscripción, no `amount` directo —
+  // una anual de $120.000 debe sumar $10.000/mes, no $120.000/mes.
+  const mensualCOP = (s: Subscription) => convertToCOP(montoMensualYAnual(s).mensual, s.currency);
+
   const gastoMensualCOP = useMemo(
-    () => activas.reduce((total, s) => total + convertToCOP(s.amount, s.currency), 0),
+    () => activas.reduce((total, s) => total + mensualCOP(s), 0),
     [activas]
   );
   const gastoAnualCOP = gastoMensualCOP * 12;
@@ -171,25 +176,22 @@ export default function DashboardScreen() {
   const ahorroMensualCOP = useMemo(
     () =>
       compartidas.reduce((total, s) => {
-        const totalCOP = convertToCOP(s.amount, s.currency);
         const porcentajePareja = s.sharedSplitPercent ?? 50;
-        return total + totalCOP * ((100 - porcentajePareja) / 100);
+        return total + mensualCOP(s) * ((100 - porcentajePareja) / 100);
       }, 0),
     [compartidas]
   );
 
   const mayorGasto = useMemo<Subscription | null>(() => {
     if (activas.length === 0) return null;
-    return activas.reduce((max, s) =>
-      convertToCOP(s.amount, s.currency) > convertToCOP(max.amount, max.currency) ? s : max
-    );
+    return activas.reduce((max, s) => (mensualCOP(s) > mensualCOP(max) ? s : max));
   }, [activas]);
 
   const categoriaTop = useMemo(() => {
     if (activas.length === 0) return null;
     const totales = new Map<string, number>();
     for (const s of activas) {
-      totales.set(s.categoryId, (totales.get(s.categoryId) ?? 0) + convertToCOP(s.amount, s.currency));
+      totales.set(s.categoryId, (totales.get(s.categoryId) ?? 0) + mensualCOP(s));
     }
     const [categoryId, total] = [...totales.entries()].sort((a, b) => b[1] - a[1])[0];
     const categoria = categories.find((c) => c.id === categoryId);
@@ -278,7 +280,7 @@ export default function DashboardScreen() {
         return {
           subscription: candidata,
           title: `${grupo.categoryName}: ${grupo.subscriptions.length} servicios`,
-          message: `${grupo.subscriptions.map((s) => s.name).join(", ")} — ¿necesitás todos?`,
+          message: `${grupo.subscriptions.map((s) => s.name).join(", ")} — ¿necesitas todos?`,
           icon: "layers" as const,
           color: DASH.violet,
           softBg: DASH.violetSoft,
@@ -307,7 +309,7 @@ export default function DashboardScreen() {
       .filter(
         (s) =>
           !s.isShared &&
-          convertToCOP(s.amount, s.currency) >= 30000 &&
+          mensualCOP(s) >= 30000 &&
           !descartadas.has(s.id) &&
           !usadas.has(s.id)
       )
@@ -462,7 +464,7 @@ export default function DashboardScreen() {
                   iconColor={DASH.textPrimary}
                   label="Mayor gasto"
                   title={mayorGasto.name}
-                  amount={mostrarMonto(mayorGasto.amount, mayorGasto.currency)}
+                  amount={mostrarMonto(montoMensualYAnual(mayorGasto).mensual, mayorGasto.currency)}
                   amountSuffix="/mes"
                   subtitle={categories.find((c) => c.id === mayorGasto.categoryId)?.name.toLowerCase()}
                   onPress={() => openDetail(mayorGasto.id)}

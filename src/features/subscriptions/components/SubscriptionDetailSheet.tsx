@@ -12,6 +12,7 @@ import * as subscriptionRepository from "../repository/subscriptionRepository";
 import { detectarAumentoPrecio } from "../domain/detectarAumentoPrecio";
 import { esSuscripcionZombie, diasSinUsar } from "../../savings/domain/detectarZombie";
 import { calcularDivisionCosto } from "../../sharing/domain/calcularDivisionCosto";
+import { montoMensualYAnual } from "../domain/montoMensualYAnual";
 import { formatCurrency } from "../../../core/currency/exchangeRate";
 import { ServiceBadge } from "../../../core/design-system/components/ServiceBadge";
 import { FONT } from "../../dashboard/dashboardTheme";
@@ -36,23 +37,6 @@ function duracionCicloDias(subscription: Subscription): number {
     case "monthly":
     default:
       return 30;
-  }
-}
-
-function montoMensualYAnual(subscription: Subscription) {
-  const { amount, billingCycle, customCycleDays } = subscription;
-  switch (billingCycle) {
-    case "yearly":
-      return { mensual: amount / 12, anual: amount };
-    case "weekly":
-      return { mensual: (amount * 52) / 12, anual: amount * 52 };
-    case "custom": {
-      const dias = customCycleDays ?? 30;
-      return { mensual: (amount * 30) / dias, anual: (amount * 365) / dias };
-    }
-    case "monthly":
-    default:
-      return { mensual: amount, anual: amount * 12 };
   }
 }
 

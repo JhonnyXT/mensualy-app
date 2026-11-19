@@ -1,5 +1,6 @@
 import type { Subscription } from "../../../core/database/schema";
 import { convertToCOP } from "../../../core/currency/exchangeRate";
+import { montoMensualYAnual } from "../../subscriptions/domain/montoMensualYAnual";
 
 export const UMBRAL_PORCENTAJE_DESPROPORCIONADO = 25;
 
@@ -19,7 +20,7 @@ export function detectarGastoDesproporcionado(
   return activas
     .map((s) => ({
       subscription: s,
-      porcentaje: (convertToCOP(s.amount, s.currency) / gastoMensualTotalCOP) * 100,
+      porcentaje: (convertToCOP(montoMensualYAnual(s).mensual, s.currency) / gastoMensualTotalCOP) * 100,
     }))
     .filter((r) => r.porcentaje >= umbralPorcentaje);
 }
